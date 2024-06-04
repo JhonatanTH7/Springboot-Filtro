@@ -27,7 +27,7 @@ public class UserRequest {
     @NotBlank(message = "The password is required")
     private String password;
 
-    @Schema(description = "ID of the creator of the survey,value cannot be less than 1", example = "1")
+    @Schema(description = "State of the user (true or false)")
     @NotNull(message = "The status (active) is required - true or false")
     private boolean active;
 
