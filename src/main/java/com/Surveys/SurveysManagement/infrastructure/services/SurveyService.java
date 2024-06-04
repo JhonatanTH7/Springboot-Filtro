@@ -8,8 +8,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.Surveys.SurveysManagement.api.dto.request.SurveyRequest;
+import com.Surveys.SurveysManagement.api.dto.response.question.OptionQuestionResponse;
+import com.Surveys.SurveysManagement.api.dto.response.question.QuestionResponse;
 import com.Surveys.SurveysManagement.api.dto.response.survey.SurveyBasicResponse;
 import com.Surveys.SurveysManagement.api.dto.response.survey.SurveyResponse;
+import com.Surveys.SurveysManagement.domain.entities.Question;
 import com.Surveys.SurveysManagement.domain.entities.Survey;
 import com.Surveys.SurveysManagement.domain.repositories.SurveyRepository;
 import com.Surveys.SurveysManagement.domain.repositories.UserRepository;
@@ -62,8 +65,17 @@ public class SurveyService implements ISurveyService {
 
     private SurveyResponse entityToResponse(Survey entity) {
         SurveyResponse surveyResponse = EntityToEntity.entityToEntity(entity, SurveyResponse.class);
-        surveyResponse.setQuestions(null);
+        surveyResponse.setQuestions(entity.getQuestions().stream().map(this::questionToResponse).toList());
         return surveyResponse;
+    }
+
+    private QuestionResponse questionToResponse(Question question) {
+        QuestionResponse questionResponse = EntityToEntity.entityToEntity(question, QuestionResponse.class);
+        questionResponse.setOptions(question.getOptions().stream().map(
+                option -> {
+                    return EntityToEntity.entityToEntity(option, OptionQuestionResponse.class);
+                }).toList());
+        return questionResponse;
     }
 
 }
