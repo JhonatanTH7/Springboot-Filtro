@@ -32,7 +32,7 @@ public class User {
     private String name;
 
     @Email
-    @Column(length = 100, nullable = false, unique = true)
+    @Column(length = 100, nullable = false)
     private String email;
 
     @Column(nullable = false)

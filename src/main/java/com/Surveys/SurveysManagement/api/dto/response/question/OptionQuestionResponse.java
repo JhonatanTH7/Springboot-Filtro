@@ -14,7 +14,7 @@ public class OptionQuestionResponse {
     private Long idOptionQuestion;
     @Schema(description = "Statement of the option")
     private String text;
-    @Schema(description = "status of the option")
+    @Schema(description = "Status of the option")
     private boolean active;
 
 }

@@ -17,6 +17,7 @@ import com.Surveys.SurveysManagement.api.dto.request.UserRequest;
 import com.Surveys.SurveysManagement.api.dto.response.user.UserResponse;
 import com.Surveys.SurveysManagement.infrastructure.abstract_services.IUserService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 
 @RestController
@@ -27,6 +28,7 @@ public class UserController {
     @Autowired
     private final IUserService iUserService;
 
+    @Operation(summary = "Shows all users", description = "Displays all users that have been saved in the database")
     @GetMapping
     public ResponseEntity<Page<UserResponse>> getAll(
             @RequestParam(defaultValue = "1") int page,
@@ -34,17 +36,20 @@ public class UserController {
         return ResponseEntity.ok(this.iUserService.getAll(page - 1, size));
     }
 
+    @Operation(summary = "Search for a user", description = "Displays the user to which the id refers to")
     @GetMapping(path = "/{id}")
     public ResponseEntity<UserResponse> getById(@PathVariable Long id) {
         return ResponseEntity.ok(this.iUserService.getById(id));
     }
 
+    @Operation(summary = "Create a user", description = "Create a user with the sent parameters")
     @PostMapping
     public ResponseEntity<UserResponse> create(
             @Validated @RequestBody UserRequest request) {
         return ResponseEntity.ok(this.iUserService.create(request));
     }
 
+    @Operation(summary = "Update a user", description = "Updates a user with the parameters sent")
     @PutMapping
     public ResponseEntity<UserResponse> update(
             @Validated @RequestBody UserRequest request,
