@@ -1,5 +1,6 @@
 package com.Surveys.SurveysManagement.api.dto.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -12,17 +13,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserRequest {
 
+    @Schema(description = "Name of the user", example = "Jhonatan Toro")
     @NotBlank(message = "The name is required")
     @Size(max = 100, message = "The name must have a maximum of 100 characters")
     private String name;
 
+    @Schema(description = "Email of the user", example = "pepito_perez90@gmail.com")
     @NotBlank(message = "The email is required")
     @Size(max = 100, message = "The email must have a maximum of 100 characters")
     private String email;
 
+    @Schema(description = "Password of the user", example = "pepito_perez90*123")
     @NotBlank(message = "The password is required")
     private String password;
 
+    @Schema(description = "ID of the creator of the survey,value cannot be less than 1", example = "1")
     @NotNull(message = "The status (active) is required - true or false")
     private boolean active;
 
