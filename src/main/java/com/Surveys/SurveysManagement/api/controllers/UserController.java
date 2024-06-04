@@ -20,7 +20,7 @@ import com.Surveys.SurveysManagement.infrastructure.abstract_services.IUserServi
 import lombok.AllArgsConstructor;
 
 @RestController
-@RequestMapping(path = "/user")
+@RequestMapping(path = "/users")
 @AllArgsConstructor
 public class UserController {
 
@@ -39,13 +39,13 @@ public class UserController {
         return ResponseEntity.ok(this.iUserService.getById(id));
     }
 
-    @PostMapping(path = "/create")
+    @PostMapping
     public ResponseEntity<UserResponse> create(
             @Validated @RequestBody UserRequest request) {
         return ResponseEntity.ok(this.iUserService.create(request));
     }
 
-    @PutMapping(path = "/update/{id}")
+    @PutMapping
     public ResponseEntity<UserResponse> update(
             @Validated @RequestBody UserRequest request,
             @PathVariable Long id) {
