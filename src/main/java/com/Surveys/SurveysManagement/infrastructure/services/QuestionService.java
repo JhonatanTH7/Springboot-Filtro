@@ -12,6 +12,7 @@ import com.Surveys.SurveysManagement.domain.entities.Question;
 import com.Surveys.SurveysManagement.domain.repositories.QuestionRepository;
 import com.Surveys.SurveysManagement.infrastructure.abstract_services.IQuestionService;
 import com.Surveys.SurveysManagement.infrastructure.helpers.EntityToEntity;
+import com.Surveys.SurveysManagement.util.exceptions.ResourceNotFoundException;
 
 import lombok.AllArgsConstructor;
 
@@ -51,7 +52,8 @@ public class QuestionService implements IQuestionService {
     }
 
     private Question find(Long id) {
-        return this.questionRepository.findById(id).orElseThrow();
+        return this.questionRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Question with the id: '" + id + "' not found"));
     }
 
     private QuestionResponse entityToResponse(Question entity) {

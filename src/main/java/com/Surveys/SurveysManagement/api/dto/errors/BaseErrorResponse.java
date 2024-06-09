@@ -11,10 +11,9 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class BaseErrorResponse implements Serializable{
+public class BaseErrorResponse implements Serializable {
 
     private String status;
     private Integer code;
-    private String message;
 
 }

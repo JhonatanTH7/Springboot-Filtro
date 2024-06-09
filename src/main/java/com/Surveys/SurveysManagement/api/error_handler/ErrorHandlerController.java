@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -15,13 +14,15 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.Surveys.SurveysManagement.api.dto.errors.BaseErrorResponse;
 import com.Surveys.SurveysManagement.api.dto.errors.ListErrorResponse;
+import com.Surveys.SurveysManagement.util.exceptions.ResourceNotFoundException;
 
 @RestControllerAdvice
-public class ErrorHandler {
+public class ErrorHandlerController {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ListErrorResponse handleValidationExceptions(MethodArgumentNotValidException e) {
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    public BaseErrorResponse handleValidationExceptions(MethodArgumentNotValidException e) {
+
         List<Map<String, String>> errors = new ArrayList<>();
 
         for (FieldError error : e.getBindingResult().getFieldErrors()) {
@@ -35,18 +36,26 @@ public class ErrorHandler {
                 .code(HttpStatus.BAD_REQUEST.value())
                 .status(HttpStatus.BAD_REQUEST.name())
                 .errors(errors)
-                .message(e.getDetailMessageCode())
                 .build();
+
     }
 
-    @ExceptionHandler(BadRequestException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public BaseErrorResponse handleBadRequestException(BadRequestException e) {
-        return BaseErrorResponse.builder()
-                .code(HttpStatus.BAD_REQUEST.value())
-                .status(HttpStatus.BAD_REQUEST.name())
-                .message(e.getLocalizedMessage())
+    @ExceptionHandler(ResourceNotFoundException.class)
+    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+    public BaseErrorResponse handleResourceNotFoundException(ResourceNotFoundException e) {
+
+        List<Map<String, String>> errors = new ArrayList<>();
+        Map<String, String> error = new HashMap<>();
+
+        error.put("id", e.getMessage());
+        errors.add(error);
+
+        return ListErrorResponse.builder()
+                .code(HttpStatus.NOT_FOUND.value())
+                .status(HttpStatus.NOT_FOUND.name())
+                .errors(errors)
                 .build();
+                
     }
 
 }
