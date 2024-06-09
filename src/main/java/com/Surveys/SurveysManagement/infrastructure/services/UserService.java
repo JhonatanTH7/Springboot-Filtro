@@ -11,6 +11,7 @@ import com.Surveys.SurveysManagement.domain.entities.User;
 import com.Surveys.SurveysManagement.domain.repositories.UserRepository;
 import com.Surveys.SurveysManagement.infrastructure.abstract_services.IUserService;
 import com.Surveys.SurveysManagement.infrastructure.helpers.EntityToEntity;
+import com.Surveys.SurveysManagement.util.exceptions.ResourceNotFoundException;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -50,7 +51,8 @@ public class UserService implements IUserService {
     }
 
     private User find(Long id) {
-        return this.userRepository.findById(id).orElseThrow();
+        return this.userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User with the id: '" + id + "' not found"));
     }
 
     private UserResponse entityToResponse(User entity) {

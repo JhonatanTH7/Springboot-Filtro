@@ -18,6 +18,7 @@ import com.Surveys.SurveysManagement.domain.repositories.SurveyRepository;
 import com.Surveys.SurveysManagement.domain.repositories.UserRepository;
 import com.Surveys.SurveysManagement.infrastructure.abstract_services.ISurveyService;
 import com.Surveys.SurveysManagement.infrastructure.helpers.EntityToEntity;
+import com.Surveys.SurveysManagement.util.exceptions.ResourceNotFoundException;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -50,13 +51,16 @@ public class SurveyService implements ISurveyService {
     public SurveyBasicResponse create(SurveyRequest request) {
         Survey survey = EntityToEntity.entityToEntity(request, Survey.class);
         survey.setQuestions(new ArrayList<>());
-        survey.setCreator(this.userRepository.findById(request.getIdCreator()).orElseThrow());
+        survey.setCreator(
+                this.userRepository.findById(request.getIdCreator()).orElseThrow(() -> new ResourceNotFoundException(
+                        "User (creator) with the id: '" + request.getIdCreator() + "' not found")));
         return this.entityToBasicResponse(
                 this.surveyRepository.save(survey));
     }
 
     private Survey find(Long id) {
-        return this.surveyRepository.findById(id).orElseThrow();
+        return this.surveyRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Survey with the id: '" + id + "' not found"));
     }
 
     private SurveyBasicResponse entityToBasicResponse(Survey entity) {

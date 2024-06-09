@@ -50,7 +50,7 @@ public class UserController {
     }
 
     @Operation(summary = "Update a user", description = "Updates a user with the parameters sent")
-    @PutMapping
+    @PutMapping(path = "/{id}")
     public ResponseEntity<UserResponse> update(
             @Validated @RequestBody UserRequest request,
             @PathVariable Long id) {
